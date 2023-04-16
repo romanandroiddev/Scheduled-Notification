@@ -22,7 +22,6 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".OneTimeNotificationReciever" />
     </application>
 
 </manifest>
