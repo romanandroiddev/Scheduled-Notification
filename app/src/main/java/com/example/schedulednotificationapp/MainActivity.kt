@@ -1,9 +1,16 @@
 package com.example.schedulednotificationapp
 
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import com.example.schedulednotificationapp.databinding.ActivityMainBinding
 import com.google.android.material.timepicker.MaterialTimePicker
 import us.romanandroiddev.scheduled_notification_builder.ScheduledNotification
@@ -20,9 +27,14 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.btnShowNotification.setOnClickListener {
-            ScheduledNotification.Builder(this).setType(NotificationType.INSTANT)
-                .setTitle("Hello it is title").setDescription("It is simple discription")
-                .setIcon(R.drawable.ic_launcher_background).build()
+            val intent = Intent(this, MainActivity::class.java)
+
+            val pendingIntent = PendingIntent.getActivity(
+                this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+            )
+            val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(System.currentTimeMillis()+10000,pendingIntent),pendingIntent)
+
         }
 
         binding.btnScheduledNotification.setOnClickListener {
@@ -43,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                     .setDescription("It is description for scheduled notification")
                     .setIcon(R.drawable.ic_launcher_background)
                     .setScheduledTime(calendar.timeInMillis).build()
-                Toast.makeText(this,"SUCCESFULLY ADDED TO QUEUE", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "SUCCESFULLY ADDED TO QUEUE", Toast.LENGTH_SHORT).show()
             }
         }
 
